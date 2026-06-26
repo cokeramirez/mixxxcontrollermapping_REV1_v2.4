@@ -187,7 +187,7 @@ When stems priority is not active, Scratch Bank uses pads as follows:
 | 10 | **SCRATCH BANK pads 5–8** + **LEVEL/DEPTH** | Adjust effect volume / while held. |
 | 10 | **SCRATCH BANK pads 5–8** + **Rotary Selector** | Select stem effect chain / while held. |
 
-![Stems and stem-effect positions: voice, melody, bass, drums.](../img/Mixxx-250-Hardware-DDJ_REV1-stems-layout.svg)
+![Stems and stem-effect positions: voice, melody, bass, drums.](/img/Mixxx-250-Hardware-DDJ_REV1-stems-layout.svg)
 
 *Stems and stem-effect positions: voice, melody, bass, drums.*
 
@@ -211,7 +211,7 @@ per-deck modes on the Auto Loop pad row (1→2→3→4→1). Release **SHIFT**
 or wait 1.5 s after the last step to lock. Mode preview uses the shift pad LED
 row.
 
-![Mixxxed Mode slot 4 — Scratch Bank. Scratch samples loaded.](../img/Mixxx-250-Hardware-DDJ_REV1-lights-mode4.svg)
+![Mixxxed Mode slot 4 — Scratch Bank. Scratch samples loaded.](img/Mixxx-250-Hardware-DDJ_REV1-lights-mode4.svg)
 
 *Mixxxed Mode slot 4: Scratch Bank. Scratch samples loaded.*
 
@@ -235,7 +235,7 @@ row.
 
 | | |
 |---|---|
-| ![Mixxxed Mode slot 2 — Beat Slicer linear mode pad lighting example.](../img/Mixxx-250-Hardware-DDJ_REV1-lights-mode2-linear.svg) | ![Mixxxed Mode slot 2 — Beat Slicer loop mode pad lighting example.](../img/Mixxx-250-Hardware-DDJ_REV1-lights-mode2-loop.svg) |
+| ![Mixxxed Mode slot 2 — Beat Slicer linear mode pad lighting example.](img/Mixxx-250-Hardware-DDJ_REV1-lights-mode2-linear.svg) | ![Mixxxed Mode slot 2 — Beat Slicer loop mode pad lighting example.](img/Mixxx-250-Hardware-DDJ_REV1-lights-mode2-loop.svg) |
 | Beat Slicer — Linear Mode | Beat Slicer — Loop Mode |
 
 Mixxxed Mode slot 2: Beat Slicer. Pad lighting follows the active slice.
