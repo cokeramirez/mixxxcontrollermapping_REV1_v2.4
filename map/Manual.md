@@ -260,7 +260,7 @@ C-scale example — pad 1 = original reference key:
 
 | | |
 |---|---|
-| ![Piano Roll Major mode — deck 1 major scale (C example).](../img/Mixxx-250-Hardware-DDJ_REV1-Major-Deck1-MajorScale.svg) | ![Piano Roll Major mode — deck 2 minor scale (C example).](../img/Mixxx-250-Hardware-DDJ_REV1-Major-Deck2-MinorScale.svg) |
+| ![Piano Roll Major mode — deck 1 major scale (C example).](map/img/Mixxx-250-Hardware-DDJ_REV1-Major-Deck1-MajorScale.svg) | ![Piano Roll Major mode — deck 2 minor scale (C example).](map/img/Mixxx-250-Hardware-DDJ_REV1-Major-Deck2-MinorScale.svg) |
 | Deck 1 — Major scale | Deck 2 — Minor scale |
 
 ##### Minor [Aeolian]
