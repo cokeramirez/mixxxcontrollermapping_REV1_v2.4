@@ -313,7 +313,7 @@ active pitch keys; the right deck adds +12 semitones.
 | 4 | Auto Loop Mode **pads 1–4** | Load scratch samples from samples **17–20** (deck 1 / 3) and **21–24** (deck 2 / 4). |
 
 ### User configuration options {#user-configuration-options}
-
+![User Controls](img/UserControls.gif)
 Controller settings are exposed in mapping options (XML); script defaults apply
 as fallback.
 
