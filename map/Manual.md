@@ -269,7 +269,7 @@ C-scale example — pad 1 = original reference key:
 
 | | |
 |---|---|
-| ![Piano Roll Minor mode — deck 1 major scale (C example).](../../_static/controllers/Mixxx-250-Hardware-DDJ_REV1-Minor-Deck1-MajorScale.svg) | ![Piano Roll Minor mode — deck 2 minor scale (C example).](../../_static/controllers/Mixxx-250-Hardware-DDJ_REV1-Minor-Deck2-MinorScale.svg) |
+| ![Piano Roll Minor mode — deck 1 major scale (C example).](../../_map/img/Mixxx-250-Hardware-DDJ_REV1-Minor-Deck1-MajorScale.svg) | ![Piano Roll Minor mode — deck 2 minor scale (C example).](img/Mixxx-250-Hardware-DDJ_REV1-Minor-Deck2-MinorScale.svg) |
 | Deck 1 — Major scale | Deck 2 — Minor scale |
 
 ##### Play Through
