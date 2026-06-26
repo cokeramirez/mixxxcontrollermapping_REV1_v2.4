@@ -187,7 +187,7 @@ When stems priority is not active, Scratch Bank uses pads as follows:
 | 10 | **SCRATCH BANK pads 5–8** + **LEVEL/DEPTH** | Adjust effect volume / while held. |
 | 10 | **SCRATCH BANK pads 5–8** + **Rotary Selector** | Select stem effect chain / while held. |
 
-![Stems and stem-effect positions: voice, melody, bass, drums.](/img/Mixxx-250-Hardware-DDJ_REV1-stems-layout.svg)
+![Stems and stem-effect positions: voice, melody, bass, drums.](img/Mixxx-250-Hardware-DDJ_REV1-stems-layout.svg)
 
 *Stems and stem-effect positions: voice, melody, bass, drums.*
 
@@ -260,7 +260,7 @@ C-scale example — pad 1 = original reference key:
 
 | | |
 |---|---|
-| ![Piano Roll Major mode — deck 1 major scale (C example).](map/img/Mixxx-250-Hardware-DDJ_REV1-Major-Deck1-MajorScale.svg) | ![Piano Roll Major mode — deck 2 minor scale (C example).](map/img/Mixxx-250-Hardware-DDJ_REV1-Major-Deck2-MinorScale.svg) |
+| ![Piano Roll Major mode — deck 1 major scale (C example).](img/Mixxx-250-Hardware-DDJ_REV1-Major-Deck1-MajorScale.svg) | ![Piano Roll Major mode — deck 2 minor scale (C example).](img/Mixxx-250-Hardware-DDJ_REV1-Major-Deck2-MinorScale.svg) |
 | Deck 1 — Major scale | Deck 2 — Minor scale |
 
 ##### Minor [Aeolian]
@@ -269,7 +269,7 @@ C-scale example — pad 1 = original reference key:
 
 | | |
 |---|---|
-| ![Piano Roll Minor mode — deck 1 major scale (C example).](../Mixxx-250-Hardware-DDJ_REV1-Minor-Deck1-MajorScale.svg) | ![Piano Roll Minor mode — deck 2 minor scale (C example).](../Mixxx-250-Hardware-DDJ_REV1-Minor-Deck2-MinorScale.svg) |
+| ![Piano Roll Minor mode — deck 1 major scale (C example).](img/Mixxx-250-Hardware-DDJ_REV1-Minor-Deck1-MajorScale.svg) | ![Piano Roll Minor mode — deck 2 minor scale (C example).](img/Mixxx-250-Hardware-DDJ_REV1-Minor-Deck2-MinorScale.svg) |
 | Deck 1 — Major scale | Deck 2 — Minor scale |
 
 ##### Play Through
@@ -279,9 +279,9 @@ active pitch keys; the right deck adds +12 semitones.
 
 | | |
 |---|---|
-| ![Piano Roll Play Through — deck 1 major scale (C example).](../img/Mixxx-250-Hardware-DDJ_REV1-PT-Deck1-MajorScale.svg) | ![Piano Roll Play Through — deck 2 minor scale (C example).](../img/Mixxx-250-Hardware-DDJ_REV1-PT-Deck2-MinorScale.svg) |
+| ![Piano Roll Play Through — deck 1 major scale (C example).](img/Mixxx-250-Hardware-DDJ_REV1-PT-Deck1-MajorScale.svg) | ![Piano Roll Play Through — deck 2 minor scale (C example).](img/Mixxx-250-Hardware-DDJ_REV1-PT-Deck2-MinorScale.svg) |
 | Deck 1 — Major scale | Deck 2 — Minor scale |
-| ![Piano Roll Play Through — deck 1 major scale SHIFT row (C example).](../img/Mixxx-250-Hardware-DDJ_REV1-PT-Deck1-MajorScale-SHIFT.svg) | ![Piano Roll Play Through — deck 2 minor scale SHIFT row (C example).](../img/Mixxx-250-Hardware-DDJ_REV1-PT-Deck2-MinorScale-SHIFT.svg) |
+| ![Piano Roll Play Through — deck 1 major scale SHIFT row (C example).](img/Mixxx-250-Hardware-DDJ_REV1-PT-Deck1-MajorScale-SHIFT.svg) | ![Piano Roll Play Through — deck 2 minor scale SHIFT row (C example).](img/Mixxx-250-Hardware-DDJ_REV1-PT-Deck2-MinorScale-SHIFT.svg) |
 | Deck 1 — Major scale (SHIFT) | Deck 2 — Minor scale (SHIFT) |
 
 > **Hint**
