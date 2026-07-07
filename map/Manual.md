@@ -340,7 +340,8 @@ as fallback.
 | `PioneerDDJREV1.beatSlicerPattern` | Beat Slicer pattern: `linear` or `loop`. | `linear` |
 | `PioneerDDJREV1.pianoRollScale` | Piano Roll scale: `major`, `minor`, or `play through`. | `major` |
 | `PioneerDDJREV1.disableStartFader` | **Shift** + **Any fader** Disables channel and crossfader start. | `false` |
-| `PioneerDDJREV1PROD.samplePadLayout` | `Standard` / `Banked Rows` / `Per Pad 32`. | `Standard` |
+| `PioneerDDJREV1.disableStartFader` | **Shift** + **Any fader** Disables channel and crossfader start. | `false` |
+| `PioneerDDJREV1PROD.cdjVinylTogglePulseEnabled` | Enabling lighiting indicator for deck switch. Vinly - 2 flast blinks / CDJ 3 slower blinks | `false` |
 
 > **Note**  
 > `samplePadLayout` layouts
