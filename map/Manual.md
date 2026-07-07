@@ -206,7 +206,9 @@ When stems priority is not active, Scratch Bank uses pads as follows:
 
 ### *MIXXXED mode* section {#mixxxed-mode}
 
-When `multiModeEnabled` is on, **SHIFT** + **←FX2/FX3→** cycles
+Mixxxed mode allows you to dynamically switch autoloop mode pads to other available modes. Mode is not on by default and must be enabled in configurations. 
+
+When `mixxxedModeEnabled` is on, **SHIFT** + **←FX2/FX3→** cycles
 per-deck modes on the Auto Loop pad row (1→2→3→4→1). Release **SHIFT**
 or wait 1.5 s after the last step to lock. Mode preview uses the shift pad LED
 row.
@@ -336,7 +338,7 @@ as fallback.
 | `PioneerDDJREV1.tempSamplerSkin` | Show sampler UI while using the sampler volume gate. | `false` |
 | `PioneerDDJREV1.splitFx` | **LEVEL/DEPTH** routing: Off (default) controls both FX units; On routes **LEVEL/DEPTH**-> FX1 vs **SHIFT** + **LEVEL/DEPTH**-> FX2. | `false` |
 | `PioneerDDJREV1.tempoRangeProfile` | **Deck Select** long press cycles through preselected ranges (wraps to first step). Default [8%, 16%, 50%], Classic [6%, 10%, 16%, 25%], Alt Step Size [8%, 24%, 50%], Extreme [8%, 16%, 50%, 100%]. | `Default` |
-| `PioneerDDJREV1.multiModeEnabled` | **Shift** + **←FX2/FX3→** cycles through available modes. | `false` |
+| `PioneerDDJREV1.mixxxedModeEnabled` | **Shift** + **←FX2/FX3→** cycles through available modes. | `false` |
 | `PioneerDDJREV1.beatSlicerPattern` | Beat Slicer pattern: `linear` or `loop`. | `linear` |
 | `PioneerDDJREV1.pianoRollScale` | Piano Roll scale: `major`, `minor`, or `play through`. | `major` |
 | `PioneerDDJREV1.disableStartFader` | **Shift** + **Any fader** Disables channel and crossfader start. | `false` |
