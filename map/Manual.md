@@ -249,12 +249,10 @@ Mixxxed Mode slot 2: Beat Slicer. Pad lighting follows the active slice.
 | 3 | Auto Loop Mode — slot 3 | Piano Roll — pitch and anchor modes (Major / Minor / Play Through). |
 | 3 | Auto Loop Mode **SHIFT** + **pads 1–8** | Anchor modes only: toggle hotcue anchor override on deck 1 (SHIFT row LEDs show set hotcues). |
 
-All piano pads target **deck 1** audio. The right Auto Loop row is decks 1 / 3;
-the right row is decks 2 / 4. In **anchor modes** (Major / Minor), pad 1 is the
+All piano pads target **deck 1** audio. In **anchor modes** (Major / Minor), pad 1 is the
 **original reference key**; playback snaps to the anchor on each pad press.
 
-> **Note**  
-> `Keylock` - is enabled while in piano mode. Exist all piano decks to revert back to previous enable/disabled status.
+.. note:: ``Keylock`` - is enabled while in piano mode. Exit all piano decks to revert back to previous enabled/disabled status. 
 
 ##### Major [Ionian]
 
