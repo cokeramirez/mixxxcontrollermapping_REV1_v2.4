@@ -1,4 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  Pioneer DDJ-REV1 mapping for Mixxx
+  Files: Pioneer-DDJ-REV1-scripts.js, Pioneer DDJ-REV1.midi.xml
+  Copyright (C) 2024-2026 AKOI, Alexandr, LauraRozier, Mjlyon, 0b1-twan
+  This program is free software; you can redistribute it and/or modify it
+  under the terms of the GNU General Public License as published by the
+  Free Software Foundation; either version 2 of the License, or (at your
+  option) any later version.
+  This program is distributed in the hope that it will be useful, but
+  WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
+  Public License for more details.
+  You should have received a copy of the GNU General Public License along
+  with this program. If not, see <https://www.gnu.org/licenses/>.
+-->
 <MixxxControllerPreset mixxxVersion="2.6" schemaVersion="1">
   <info>
     <name>Pioneer DDJ-REV1</name>
@@ -622,7 +637,7 @@
           <value label="16">16</value>
           <value label="32">32</value>
           <value label="64">64</value>
-          <description>First Pad.</description>
+          <description>First Pad. The top left pad button.</description>
         </option>
         <option variable="beatLoopRollsSize2" type="enum" label=":hwbtn:`Second Pad`">
           <value label="Half">half</value>
@@ -639,7 +654,7 @@
           <value label="16">16</value>
           <value label="32">32</value>
           <value label="64">64</value>
-          <description>Second Pad.</description>
+          <description>Second Pad.The top left second pad button.</description>
         </option>
         <option variable="beatLoopRollsSize3" type="enum" label=":hwbtn:`Third Pad`">
           <value label="Half">half</value>
@@ -656,7 +671,7 @@
           <value label="16">16</value>
           <value label="32">32</value>
           <value label="64">64</value>
-          <description>Third Pad.</description>
+          <description>Third Pad.The top right third pad button.</description>
         </option>
         <option variable="beatLoopRollsSize4" type="enum" label=":hwbtn:`Fourth Pad`">
           <value label="Half">half</value>
@@ -673,7 +688,7 @@
           <value label="16">16</value>
           <value label="32">32</value>
           <value label="64">64</value>
-          <description>Fourth Pad.</description>
+          <description>Fourth Pad. The top right fourth pad button.</description>
         </option>
       </row>
       <row orientation="vertical">
@@ -692,7 +707,7 @@
           <value label="16">16</value>
           <value label="32">32</value>
           <value label="64">64</value>
-          <description>Fifth Pad.</description>
+          <description>Fifth Pad. The bottom left pad button.</description>
         </option>
         <option variable="beatLoopRollsSize6" type="enum" label=":hwbtn:`Sixth Pad`">
           <value label="Half">half</value>
@@ -709,7 +724,7 @@
           <value label="16">16</value>
           <value label="32">32</value>
           <value label="64">64</value>
-          <description>Sixth Pad.</description>
+          <description>Sixth Pad.The bottom left second pad button.</description>
         </option>
         <option variable="beatLoopRollsSize7" type="enum" label=":hwbtn:`Seventh Pad`">
           <value label="Half">half</value>
@@ -726,7 +741,7 @@
           <value label="16">16</value>
           <value label="32">32</value>
           <value label="64">64</value>
-          <description>Seventh Pad.</description>
+          <description>Seventh Pad. The bottom right third pad button.</description>
         </option>
         <option variable="beatLoopRollsSize8" type="enum" label=":hwbtn:`Eighth Pad`">
           <value label="Half">half</value>
@@ -743,7 +758,7 @@
           <value label="16">16</value>
           <value label="32">32</value>
           <value label="64">64</value>
-          <description>Eighth Pad.</description>
+          <description>Eighth Pad.The bottom right fourth pad button.</description>
         </option>
       </row>
     </group>
@@ -799,7 +814,7 @@
         <value label="Main Output (master L/R ⚪ 🔴across all meters)">main_lr</value>
         <description>Per deck: each meter follows `[ChannelN] vu_meter`. Main Output: left-column meters track `[Main] vu_meter_left` (or `[Master]` fallback); right-column meters track `[Main] vu_meter_right`. See Future/NOTES.md for optional future smart-auto ideas.</description>
       </option>
-      <option variable="multiModeEnabled" type="boolean" default="false" label="Mixxxed-Mode (See Manual📃)">
+      <option variable="mixxxedModeEnabled" type="boolean" default="false" label="Mixxxed-Mode (See Manual📃)">
         <description>When enabled, :hwbtn:`SHIFT` + FX beat buttons cycle per-deck modes on the Auto Loop pad row (Autoloop (1), Beat Slicer (2), Piano Roll (3), Scratch Bank (4)). Release :hwbtn:`SHIFT` or wait 1.5 s after the last step to lock. Mode preview uses the shift pad LED row.</description>
       </option>
       <option variable="beatSlicerPattern" type="enum" label="‣         🔪 Beat Slicer pattern (Mixxxed-Mode Slot 2)">
@@ -6456,7 +6471,7 @@
         <midino>0x54</midino>
         <minimum>0.5</minimum>
       </output>
-      <!-- Track loaded -->
+      <!-- Load Track -->
       <output>
         <group>[Channel1]</group>
         <key>track_loaded</key>
@@ -6489,7 +6504,7 @@
         <midino>0x26</midino>
         <minimum>0.5</minimum>
       </output>
-      <!-- Group enable -->
+    <!-- Effects Group -->
       <output>
         <group>[EffectRack1_EffectUnit1]</group>
         <key>group_[Channel1]_enable</key>
