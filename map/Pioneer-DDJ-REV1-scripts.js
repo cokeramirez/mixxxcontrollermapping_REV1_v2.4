@@ -266,9 +266,19 @@ PioneerDDJREV1.syncPulseTimers = {};
 PioneerDDJREV1.syncPulseIgnoreUntil = {};
 
 // Jogwheels
-PioneerDDJREV1.alpha = 1.0 / 8;
-PioneerDDJREV1.beta = PioneerDDJREV1.alpha / 32;
+PioneerDDJREV1.alpha = 2.0 / 8;
+PioneerDDJREV1.beta =  PioneerDDJREV1.alpha / 16;
 PioneerDDJREV1.nonShiftScratchResolution = 720;
+
+ // PHYSICAL INERTIA CONFIGURATION
+PioneerDDJREV1.INERTIA_TIMEOUT_MS = 5;        
+PioneerDDJREV1.INERTIA_TIMEOUT_MS_PAUSE = 20; 
+PioneerDDJREV1.POST_SCRATCH_LOCKOUT_MS = 250; 
+
+PioneerDDJREV1.isDeckTouched = [false, false, false, false];
+PioneerDDJREV1.scratchStopTimer = [null, null, null, null];
+PioneerDDJREV1.lastMovementTime = [0, 0, 0, 0];
+PioneerDDJREV1.lastScratchExitTime = [0, 0, 0, 0];  
 
 // Multiplier for fast seek through track using SHIFT+JOGWHEEL
 PioneerDDJREV1.fastSeekScale = 50;
@@ -2220,7 +2230,31 @@ PioneerDDJREV1.Components.Jog = {
     jogTurn: function(channel, control, value, group) {
         const deckNum = channel + 1;
         const newVal = value - 64;
+
+        const now = Date.now();
+        const delta = now - PioneerDDJREV1.lastMovementTime[channel];
+        PioneerDDJREV1.lastMovementTime[channel] = now;
+
         if (engine.isScratching(deckNum)) {
+            if (!PioneerDDJREV1.isDeckTouched[channel]) {
+                const isPlaying = engine.getValue(group, "play");
+                // Dynamic timeout if playing and pushing forward
+                const timeout = (isPlaying && newVal > 0) ? PioneerDDJREV1.INERTIA_TIMEOUT_MS : PioneerDDJREV1.INERTIA_TIMEOUT_MS_PAUSE;
+                
+                if (delta > timeout) { 
+                    PioneerDDJREV1.exitScratchMode(channel, group); 
+                    return; 
+                }
+                
+                if (PioneerDDJREV1.scratchStopTimer[channel]) {
+                    engine.stopTimer(PioneerDDJREV1.scratchStopTimer[channel]);
+                }
+                PioneerDDJREV1.scratchStopTimer[channel] = engine.beginTimer(timeout + 10, function() {
+                    if (!PioneerDDJREV1.isDeckTouched[channel]) {
+                        PioneerDDJREV1.exitScratchMode(channel, group);
+                    }
+                }, true);
+            }
             engine.scratchTick(deckNum, newVal);
         } else {
             const trackLoaded = engine.getValue(group, "track_loaded");
@@ -2230,7 +2264,7 @@ PioneerDDJREV1.Components.Jog = {
             const zoomEnabled = PioneerDDJREV1.waveformZoomEnabled && isJogSide;
             const zoomMode = PioneerDDJREV1.waveformZoomMode || "vinyl";
             const deckIsVinyl = !!PioneerDDJREV1.vinylMode[channel];
-            const modeAllowsZoom = (zoomMode === "vinyl" && deckIsVinyl) || (zoomMode === "cdj" && !deckIsVinyl);
+            const modeAllowsZoom = (zoomMode === "vinyl" && deckIsVinyl) || (zoomMode === "cdj" && !deckIsVinyl);            
             if (zoomEnabled && modeAllowsZoom && trackLoaded) {
                 if (value === 63) {
                     PioneerDDJREV1.wave = PioneerDDJREV1.wave + 0.1;
@@ -2240,10 +2274,15 @@ PioneerDDJREV1.Components.Jog = {
                     engine.setValue(group, "waveform_zoom", PioneerDDJREV1.wave);
                 }
             } else {
+                // Prevent jog interference immediately after releasing a scratch
+                if (now - PioneerDDJREV1.lastScratchExitTime[channel] < PioneerDDJREV1.POST_SCRATCH_LOCKOUT_MS) {
+                    return;
+                }
                 engine.setValue(group, "jog", newVal * PioneerDDJREV1.bendScale);
             }
         }
     },
+
     // ** jogSearch ** - wheel position search when loop adjust active
     jogSearch: function(channel, value, group) {
         const deckNum = channel + 1;
@@ -2284,20 +2323,30 @@ PioneerDDJREV1.Components.Jog = {
         }
 
         if (value !== 0 && vinylEnabled) {
+            PioneerDDJREV1.isDeckTouched[channel] = true;
+            if (PioneerDDJREV1.scratchStopTimer[channel]) {
+                engine.stopTimer(PioneerDDJREV1.scratchStopTimer[channel]);
+                PioneerDDJREV1.scratchStopTimer[channel] = null;
+            }
             PioneerDDJREV1.brakeInterruptedByScratch[channel] = !!PioneerDDJREV1.brakingActive[group];
             PioneerDDJREV1.Components.invoke("transport", "cancelActiveBrake", [group]);
+            
+            // Apply preferred Alpha/Beta calibration when the platter is touched
             engine.scratchEnable(deckNum, PioneerDDJREV1.nonShiftScratchResolution, 33 + 1 / 3, PioneerDDJREV1.alpha, PioneerDDJREV1.beta);
         } else {
-            engine.scratchDisable(deckNum);
-            if (PioneerDDJREV1.brakeInterruptedByScratch[channel]) {
-                PioneerDDJREV1.brakeInterruptedByScratch[channel] = false;
-                engine.setValue(group, "play", 0);
+            PioneerDDJREV1.isDeckTouched[channel] = false;
+            if (PioneerDDJREV1.scratchStopTimer[channel]) {
+                engine.stopTimer(PioneerDDJREV1.scratchStopTimer[channel]);
             }
-            if (PioneerDDJREV1.VinylSlipAutoff && vinylEnabled) {
-                engine.setValue(group, "slip_enabled", 0);
-            }
+            // Safety timer in case the platter stops immediately upon release
+            PioneerDDJREV1.scratchStopTimer[channel] = engine.beginTimer(PioneerDDJREV1.INERTIA_TIMEOUT_MS + 5, function() {
+                if (!PioneerDDJREV1.isDeckTouched[channel]) {
+                    PioneerDDJREV1.exitScratchMode(channel, group);
+                }
+            }, true);
         }
     },
+
     toggleVinylMode: function(channel, value, group) {
         if (value > 0) {
             const deckNum = channel + 1;
@@ -2305,7 +2354,7 @@ PioneerDDJREV1.Components.Jog = {
             PioneerDDJREV1.loopAdjustIn[channel] = false;
             PioneerDDJREV1.loopAdjustOut[channel] = false;
             if (engine.isScratching(deckNum)) {
-                engine.scratchDisable(deckNum);
+                engine.scratchDisable(deckNum,false); 
             }
             if (PioneerDDJREV1.VinylSlipAutoff) {
                 engine.setValue(group, "slip_enabled", 0);
@@ -2324,6 +2373,25 @@ PioneerDDJREV1.Components.Jog = {
             PioneerDDJREV1.MixxxedModeOnShiftReleased();
         }
     },
+};
+
+PioneerDDJREV1.exitScratchMode = function(channel, group) {
+    const deckNum = channel + 1;
+    if (engine.isScratching(deckNum)) {
+        engine.scratchDisable(deckNum, false); // Instant disable without the slow Mixxx velocity ramp
+        PioneerDDJREV1.lastScratchExitTime[channel] = Date.now(); 
+    }
+    if (PioneerDDJREV1.scratchStopTimer[channel]) {
+        engine.stopTimer(PioneerDDJREV1.scratchStopTimer[channel]);
+        PioneerDDJREV1.scratchStopTimer[channel] = null;
+    }
+    if (PioneerDDJREV1.brakeInterruptedByScratch[channel]) {
+        PioneerDDJREV1.brakeInterruptedByScratch[channel] = false;
+        engine.setValue(group, "play", 0);
+    }
+    if (PioneerDDJREV1.VinylSlipAutoff) {
+        engine.setValue(group, "slip_enabled", 0);
+    }
 };
 
 PioneerDDJREV1.Components.Sampler = {
