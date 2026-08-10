@@ -279,6 +279,10 @@ PioneerDDJREV1.isDeckTouched = [false, false, false, false];
 PioneerDDJREV1.scratchStopTimer = [null, null, null, null];
 PioneerDDJREV1.lastMovementTime = [0, 0, 0, 0];
 PioneerDDJREV1.lastScratchExitTime = [0, 0, 0, 0];  
+// Initialize physical FX level/depth state variables
+PioneerDDJREV1.lastPhysicalKnobValue = 0.0;
+PioneerDDJREV1.paddle1Active = false;
+PioneerDDJREV1.paddle2Active = false;
 
 // Multiplier for fast seek through track using SHIFT+JOGWHEEL
 PioneerDDJREV1.fastSeekScale = 50;
@@ -1682,6 +1686,9 @@ PioneerDDJREV1.Components.Stems = {
         }
     },
     levelDepth: function(value) {
+        // Keep track of the actual physical knob position (0.0 to 1.0) in all cases
+        PioneerDDJREV1.lastPhysicalKnobValue = value / 127;
+
         // Level/Depth for stem mute/effect adjustment while pads are held.
         if (PioneerDDJREV1.stemShiftPressed && PioneerDDJREV1.lastStemChannel) {
             const stemVolume = value / 127;
@@ -1722,18 +1729,26 @@ PioneerDDJREV1.Components.Stems = {
             }
             return;
         }
-        // Regular Level/Depth FX1/FX2
+        // Regular Level/Depth FX1/FX2 (only updated if corresponding paddle is active)
         if (!PioneerDDJREV1.stemShiftPressed && !PioneerDDJREV1.stemEffectPressed && !PioneerDDJREV1.sampleShiftPressed) {
-            const volumeBit = value / 127;
+            const volumeBit = PioneerDDJREV1.lastPhysicalKnobValue;
             if (PioneerDDJREV1.splitFx) {
                 if (PioneerDDJREV1.shiftPressed) {
-                    engine.setValue("[EffectRack1_EffectUnit2]", "super1", volumeBit);
+                    if (PioneerDDJREV1.paddle2Active) {
+                        engine.setValue("[EffectRack1_EffectUnit2]", "super1", volumeBit);
+                    }
                 } else {
-                    engine.setValue("[EffectRack1_EffectUnit1]", "super1", volumeBit);
+                    if (PioneerDDJREV1.paddle1Active) {
+                        engine.setValue("[EffectRack1_EffectUnit1]", "super1", volumeBit);
+                    }
                 }
             } else {
-                engine.setValue("[EffectRack1_EffectUnit1]", "super1", volumeBit);
-                engine.setValue("[EffectRack1_EffectUnit2]", "super1", volumeBit);
+                if (PioneerDDJREV1.paddle1Active) {
+                    engine.setValue("[EffectRack1_EffectUnit1]", "super1", volumeBit);
+                }
+                if (PioneerDDJREV1.paddle2Active) {
+                    engine.setValue("[EffectRack1_EffectUnit2]", "super1", volumeBit);
+                }
             }
         }
     },
@@ -5111,12 +5126,26 @@ PioneerDDJREV1.shiftLockFxUnitToggle = function(_channel, _control, value, statu
     script.midiDebug(_channel, _control, value, status, _group);
 
     const st = status & 0xFF;
-    const unitGroup = (st === 0x94) ? "[EffectRack1_EffectUnit1]"
-        : (st === 0x95) ? "[EffectRack1_EffectUnit2]" : null;
-    if (!unitGroup) {
-        return;
+    const isUnit1 = (st === 0x94);
+    const unitGroup = isUnit1 ? "[EffectRack1_EffectUnit1]" : "[EffectRack1_EffectUnit2]";
+
+    // Keep track of the active paddle state
+    if (isUnit1) {
+        PioneerDDJREV1.paddle1Active = value > 0;
+    } else {
+        PioneerDDJREV1.paddle2Active = value > 0;
     }
-    engine.setValue(unitGroup, "mix", value > 0 ? 1 : 0);
+
+    // Ensure the dry/wet master mix remains at 1.0 (100% wet)
+    // so we can cleanly control the effect depth using the Super Knob
+    engine.setValue(unitGroup, "mix", 1.0);
+
+    // Apply physical level value if paddle is active, otherwise force Super Knob to 0
+    if (value > 0) {
+        engine.setValue(unitGroup, "super1", PioneerDDJREV1.lastPhysicalKnobValue);
+    } else {
+        engine.setValue(unitGroup, "super1", 0.0);
+    }
 };
 
 PioneerDDJREV1.MixxxedModeShutdown = function() {
