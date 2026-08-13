@@ -1180,7 +1180,8 @@
         <status>0xB0</status>
         <midino>0x00</midino>
         <options>
-          <normal/>
+          <soft-takeover/>
+          <invert/>
         </options>
       </control>
       <control>
@@ -1434,7 +1435,8 @@
         <status>0xB1</status>
         <midino>0x00</midino>
         <options>
-          <normal/>
+          <soft-takeover/>
+          <invert/>
         </options>
       </control>
       <control>
@@ -2725,13 +2727,13 @@
       <!-- MIXER Section END -->
       <!-- EFFECT Section START -->
       <control>
-        <group>[Master]</group>
-        <key>PioneerDDJREV1.shiftLockFxUnitToggle</key>
-        <description>FX UNIT 1 - Paddle toggle effect depth via script</description>
+        <group>[EffectRack1_EffectUnit1]</group>
+        <key>mix</key>
+        <description>FX UNIT - press - Toggle entire FX unit on/off</description>
         <status>0x94</status>
         <midino>0x50</midino>
         <options>
-          <script-binding/>
+          <normal/>
         </options>
       </control>
       <control>
@@ -2775,13 +2777,13 @@
         </options>
       </control>
       <control>
-        <group>[Master]</group>
-        <key>PioneerDDJREV1.shiftLockFxUnitToggle</key>
-        <description>FX UNIT 2 - Paddle toggle effect depth via script</description>
+        <group>[EffectRack1_EffectUnit2]</group>
+        <key>mix</key>
+        <description>FX UNIT - press - Toggle entire FX unit on/off</description>
         <status>0x95</status>
         <midino>0x50</midino>
         <options>
-          <script-binding/>
+          <normal/>
         </options>
       </control>
       <control>
