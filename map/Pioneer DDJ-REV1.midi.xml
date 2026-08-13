@@ -1176,12 +1176,26 @@
       <control>
         <group>[Channel1]</group>
         <key>rate</key>
-        <description>TEMPO (DECK1) - slide - Adjust track playback rate</description>
+        <description>TEMPO (DECK1) - slide - Adjust track playback rate (14-bit MSB)</description>
         <status>0xB0</status>
         <midino>0x00</midino>
         <options>
-          <soft-takeover/>
           <invert/>
+          <fourteen-bit-msb/>
+          <soft-takeover/>
+        </options>
+      </control>
+      <!-- DECK 1 - PITCH FADER LSB (Fine) -->
+      <control>
+        <group>[Channel1]</group>
+        <key>rate</key>
+        <description>TEMPO (DECK1) - slide - Adjust track playback rate (14-bit LSB)</description>
+        <status>0xB0</status>
+        <midino>0x20</midino>
+        <options>
+          <invert/>
+          <fourteen-bit-lsb/>
+          <soft-takeover/>
         </options>
       </control>
       <control>
@@ -1431,10 +1445,24 @@
       <control>
         <group>[Channel2]</group>
         <key>rate</key>
-        <description>TEMPO (DECK2) - slide - Adjust track playback rate</description>
+        <description>TEMPO (DECK2) - slide - Adjust track playback rate (14-bit MSB)</description>
         <status>0xB1</status>
         <midino>0x00</midino>
         <options>
+          <fourteen-bit-msb/>
+          <soft-takeover/>
+          <invert/>
+        </options>
+      </control>
+      <!-- DECK 2 - PITCH FADER LSB (Fine) -->
+      <control>
+        <group>[Channel2]</group>
+        <key>rate</key>
+        <description>TEMPO (DECK2) - slide - Adjust track playback rate (14-bit LSB)</description>
+        <status>0xB1</status>
+        <midino>0x20</midino>
+        <options>
+          <fourteen-bit-lsb/>
           <soft-takeover/>
           <invert/>
         </options>
@@ -1696,11 +1724,26 @@
       <control>
         <group>[Channel3]</group>
         <key>rate</key>
-        <description>TEMPO (DECK3) - slide - Adjust track playback rate</description>
+        <description>TEMPO (DECK3) - slide - Adjust track playback rate (14-bit MSB)</description>
         <status>0xB2</status>
         <midino>0x00</midino>
         <options>
-          <normal/>
+          <fourteen-bit-msb/>
+          <soft-takeover/>
+          <invert/>
+        </options>
+      </control>
+      <!-- DECK 3 - PITCH FADER LSB (Fine) -->
+      <control>
+        <group>[Channel3]</group>
+        <key>rate</key>
+        <description>TEMPO (DECK3) - slide - Adjust track playback rate (14-bit LSB)</description>
+        <status>0xB2</status>
+        <midino>0x20</midino>
+        <options>
+          <fourteen-bit-lsb/>
+          <soft-takeover/>
+          <invert/>
         </options>
       </control>
       <control>
@@ -1960,11 +2003,26 @@
       <control>
         <group>[Channel4]</group>
         <key>rate</key>
-        <description>TEMPO (DECK4) - slide - Adjust track playback rate</description>
+        <description>TEMPO (DECK4) - slide - Adjust track playback rate (14-bit MSB)</description>
         <status>0xB3</status>
         <midino>0x00</midino>
         <options>
-          <normal/>
+          <fourteen-bit-msb/>
+          <soft-takeover/>
+          <invert/>
+        </options>
+      </control>
+      <!-- DECK 4 - PITCH FADER LSB (Fine) -->
+      <control>
+        <group>[Channel4]</group>
+        <key>rate</key>
+        <description>TEMPO (DECK4) - slide - Adjust track playback rate (14-bit LSB)</description>
+        <status>0xB3</status>
+        <midino>0x20</midino>
+        <options>
+          <fourteen-bit-lsb/>
+          <soft-takeover/>
+          <invert/>
         </options>
       </control>
       <control>
