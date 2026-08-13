@@ -1180,7 +1180,6 @@
         <status>0xB0</status>
         <midino>0x00</midino>
         <options>
-          <invert/>
           <fourteen-bit-msb/>
           <soft-takeover/>
         </options>
@@ -1193,7 +1192,6 @@
         <status>0xB0</status>
         <midino>0x20</midino>
         <options>
-          <invert/>
           <fourteen-bit-lsb/>
           <soft-takeover/>
         </options>
@@ -1451,7 +1449,6 @@
         <options>
           <fourteen-bit-msb/>
           <soft-takeover/>
-          <invert/>
         </options>
       </control>
       <!-- DECK 2 - PITCH FADER LSB (Fine) -->
@@ -1464,7 +1461,6 @@
         <options>
           <fourteen-bit-lsb/>
           <soft-takeover/>
-          <invert/>
         </options>
       </control>
       <control>
@@ -1730,7 +1726,6 @@
         <options>
           <fourteen-bit-msb/>
           <soft-takeover/>
-          <invert/>
         </options>
       </control>
       <!-- DECK 3 - PITCH FADER LSB (Fine) -->
@@ -1743,7 +1738,6 @@
         <options>
           <fourteen-bit-lsb/>
           <soft-takeover/>
-          <invert/>
         </options>
       </control>
       <control>
@@ -2009,7 +2003,6 @@
         <options>
           <fourteen-bit-msb/>
           <soft-takeover/>
-          <invert/>
         </options>
       </control>
       <!-- DECK 4 - PITCH FADER LSB (Fine) -->
@@ -2022,7 +2015,6 @@
         <options>
           <fourteen-bit-lsb/>
           <soft-takeover/>
-          <invert/>
         </options>
       </control>
       <control>
