@@ -273,6 +273,7 @@ PioneerDDJREV1.nonShiftScratchResolution = 720;
 // Jogwheel beatjump search (SHIFT + JOGWHEEL)
 PioneerDDJREV1.jogSearchTicks = [0, 0, 0, 0];
 PioneerDDJREV1.jogSearchTickThreshold = 10;
+PioneerDDJREV1.scratchActiveBeforeShift = [false, false, false, false];
 PioneerDDJREV1.bendScale = 0.8;
 
 PioneerDDJREV1.tempoRangeProfile = "default";
@@ -2245,10 +2246,18 @@ PioneerDDJREV1.Components.Jog = {
             }
         }
     },
-    // ** jogSearch ** - wheel position search (loop adjust or musical 4-beat jump)
-    jogSearch: function(channel, value, group) {
+    // ** jogSearch ** - wheel position search (0x26 = rim bend, 0x1F = top beatjump / loop adjust)
+    jogSearch: function(channel, control, value, group) {
         const deckNum = channel + 1;
         let newVal = value - 64;
+
+        // 0x26: SHIFT + Rim (Side) -> Always normal pitch bend, never beatjump
+        if ((control & 0xFF) === 0x26) {
+            engine.setValue(group, "jog", newVal * PioneerDDJREV1.bendScale);
+            return;
+        }
+
+        // 0x1F: SHIFT + Platter (Top)
         const loopEnabled = engine.getValue(group, "loop_enabled");
         if (loopEnabled > 0) {
             if (PioneerDDJREV1.loopAdjustIn[channel]) {
@@ -2263,9 +2272,8 @@ PioneerDDJREV1.Components.Jog = {
             }
         }
 
-        // Scratch priority: maintain 1:1 normal scratch if platter is held/scratching
-        if (engine.isScratching(deckNum)) {
-            PioneerDDJREV1.jogSearchTicks[channel] = 0;
+        // Scratch priority: if scratch was already active before pressing SHIFT, keep 1:1 scratch
+        if (PioneerDDJREV1.scratchActiveBeforeShift[channel] && engine.isScratching(deckNum)) {
             engine.scratchTick(deckNum, newVal);
             return;
         }
@@ -2304,7 +2312,10 @@ PioneerDDJREV1.Components.Jog = {
             return;
         }
 
-        if (value !== 0 && vinylEnabled) {
+        // Do not enable scratch when touching the platter if SHIFT is being held for beatjump search
+        const allowScratch = vinylEnabled && (!PioneerDDJREV1.shiftPressed || PioneerDDJREV1.scratchActiveBeforeShift[channel]);
+
+        if (value !== 0 && allowScratch) {
             PioneerDDJREV1.brakeInterruptedByScratch[channel] = !!PioneerDDJREV1.brakingActive[group];
             PioneerDDJREV1.Components.invoke("transport", "cancelActiveBrake", [group]);
             engine.scratchEnable(deckNum, PioneerDDJREV1.nonShiftScratchResolution, 33 + 1 / 3, PioneerDDJREV1.alpha, PioneerDDJREV1.beta);
@@ -2339,6 +2350,13 @@ PioneerDDJREV1.Components.Jog = {
     },
     shiftButton: function(value) {
         PioneerDDJREV1.jogSearchTicks.fill(0);
+        if (value > 0) {
+            for (let i = 0; i < 4; i++) {
+                PioneerDDJREV1.scratchActiveBeforeShift[i] = engine.isScratching(i + 1);
+            }
+        } else {
+            PioneerDDJREV1.scratchActiveBeforeShift.fill(false);
+        }
         const releasing = PioneerDDJREV1.shiftPressed && !(value > 0);
         const wasShift = PioneerDDJREV1.shiftPressed;
         PioneerDDJREV1.shiftPressed = value > 0;
@@ -2346,6 +2364,7 @@ PioneerDDJREV1.Components.Jog = {
             PioneerDDJREV1.MixxxedModeOnShiftReleased();
         }
     },
+
 };
 
 PioneerDDJREV1.Components.Sampler = {
@@ -5594,8 +5613,8 @@ PioneerDDJREV1.jogTurn = function (channel, control, value, _status, group) {
 };
 
 // Function to handle jog wheel search
-PioneerDDJREV1.jogSearch = function (channel, _control, value, _status, group) {
-    PioneerDDJREV1.Components.invoke("jog", "jogSearch", [channel, value, group]);
+PioneerDDJREV1.jogSearch = function (channel, control, value, _status, group) {
+    PioneerDDJREV1.Components.invoke("jog", "jogSearch", [channel, control, value, group]);
 };
 
 // Function to handle jog wheel touch
