@@ -270,8 +270,9 @@ PioneerDDJREV1.alpha = 1.0 / 8;
 PioneerDDJREV1.beta = PioneerDDJREV1.alpha / 32;
 PioneerDDJREV1.nonShiftScratchResolution = 720;
 
-// Multiplier for fast seek through track using SHIFT+JOGWHEEL
-PioneerDDJREV1.fastSeekScale = 50;
+// Jogwheel beatjump search (SHIFT + JOGWHEEL)
+PioneerDDJREV1.jogSearchTicks = [0, 0, 0, 0];
+PioneerDDJREV1.jogSearchTickThreshold = 10;
 PioneerDDJREV1.bendScale = 0.8;
 
 PioneerDDJREV1.tempoRangeProfile = "default";
@@ -2244,7 +2245,7 @@ PioneerDDJREV1.Components.Jog = {
             }
         }
     },
-    // ** jogSearch ** - wheel position search when loop adjust active
+    // ** jogSearch ** - wheel position search (loop adjust or musical 4-beat jump)
     jogSearch: function(channel, value, group) {
         const deckNum = channel + 1;
         let newVal = value - 64;
@@ -2261,11 +2262,30 @@ PioneerDDJREV1.Components.Jog = {
                 return;
             }
         }
-        newVal = newVal * PioneerDDJREV1.fastSeekScale;
+
+        // Scratch priority: maintain 1:1 normal scratch if platter is held/scratching
         if (engine.isScratching(deckNum)) {
+            PioneerDDJREV1.jogSearchTicks[channel] = 0;
             engine.scratchTick(deckNum, newVal);
-        } else {
-            engine.setValue(group, "jog", newVal * PioneerDDJREV1.bendScale);
+            return;
+        }
+
+        // Reset accumulator on rotation direction change
+        const currentTicks = PioneerDDJREV1.jogSearchTicks[channel];
+        if ((currentTicks > 0 && newVal < 0) || (currentTicks < 0 && newVal > 0)) {
+            PioneerDDJREV1.jogSearchTicks[channel] = 0;
+        }
+
+        PioneerDDJREV1.jogSearchTicks[channel] += newVal;
+        const threshold = PioneerDDJREV1.jogSearchTickThreshold;
+
+        while (PioneerDDJREV1.jogSearchTicks[channel] >= threshold) {
+            engine.setValue(group, "beatjump_4_forward", 1);
+            PioneerDDJREV1.jogSearchTicks[channel] -= threshold;
+        }
+        while (PioneerDDJREV1.jogSearchTicks[channel] <= -threshold) {
+            engine.setValue(group, "beatjump_4_backward", 1);
+            PioneerDDJREV1.jogSearchTicks[channel] += threshold;
         }
     },
     // ** jogTouch ** - platter touch; enables scratch or search
@@ -2273,6 +2293,7 @@ PioneerDDJREV1.Components.Jog = {
         const deckNum = channel + 1;
         const vinylEnabled = PioneerDDJREV1.vinylMode[channel];
 
+        PioneerDDJREV1.jogSearchTicks[channel] = 0;
         PioneerDDJREV1.jogPlatterTouched[channel] = value !== 0;
 
         if (PioneerDDJREV1.VinylSlipAutoff) {
@@ -2317,6 +2338,7 @@ PioneerDDJREV1.Components.Jog = {
         }
     },
     shiftButton: function(value) {
+        PioneerDDJREV1.jogSearchTicks.fill(0);
         const releasing = PioneerDDJREV1.shiftPressed && !(value > 0);
         const wasShift = PioneerDDJREV1.shiftPressed;
         PioneerDDJREV1.shiftPressed = value > 0;
