@@ -2835,13 +2835,13 @@
         </options>
       </control>
       <control>
-        <group>[EffectRack1_EffectUnit2]</group>
-        <key>mix</key>
-        <description>FX UNIT - press - Toggle entire FX unit on/off</description>
+        <group>[Master]</group>
+        <key>PioneerDDJREV1.shiftLockFxUnitToggle</key>
+        <description>FX UNIT 2 - Paddle toggle effect depth via script</description>
         <status>0x95</status>
         <midino>0x50</midino>
         <options>
-          <normal/>
+          <script-binding/>
         </options>
       </control>
       <control>
