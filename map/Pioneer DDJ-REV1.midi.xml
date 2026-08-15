@@ -6325,6 +6325,46 @@
         </options>
       </control>
       <!-- Transport Mode Pads end -->
+      <control>
+        <group>[Channel1]</group>
+        <key>PioneerDDJREV1.trackingButton</key>
+        <description>TRACKING Button (DECK 1) - Switch to Scratch Bank</description>
+        <status>0x90</status>
+        <midino>0x20</midino>
+        <options>
+          <script-binding/>
+        </options>
+      </control>
+      <control>
+        <group>[Channel2]</group>
+        <key>PioneerDDJREV1.trackingButton</key>
+        <description>TRACKING Button (DECK 2) - Switch to Scratch Bank</description>
+        <status>0x91</status>
+        <midino>0x20</midino>
+        <options>
+          <script-binding/>
+        </options>
+      </control>
+      <control>
+        <group>[Channel3]</group>
+        <key>PioneerDDJREV1.trackingButton</key>
+        <description>TRACKING Button (DECK 3) - Switch to Scratch Bank</description>
+        <status>0x92</status>
+        <midino>0x20</midino>
+        <options>
+          <script-binding/>
+        </options>
+      </control>
+      <control>
+        <group>[Channel4]</group>
+        <key>PioneerDDJREV1.trackingButton</key>
+        <description>TRACKING Button (DECK 4) - Switch to Scratch Bank</description>
+        <status>0x93</status>
+        <midino>0x20</midino>
+        <options>
+          <script-binding/>
+        </options>
+      </control>
     </controls>
     <outputs>
       <!-- PLAY -->

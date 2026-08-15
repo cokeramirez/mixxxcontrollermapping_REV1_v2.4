@@ -5915,6 +5915,11 @@ PioneerDDJREV1.loadScratchToDeck = function (channel, control, value, status, gr
     PioneerDDJREV1.Components.invoke("scratchBank", "loadScratchToDeck", [channel, control, value, status]);
 };
 
+PioneerDDJREV1.trackingButton = function(channel, control, value, status) {
+    if (value === 0) { // Se ejecuta al soltar el botón
+        midi.sendShortMsg(status, 0x6F, 0x7F);
+    }
+};
 
 
 /////////////////////////////////////////////////
