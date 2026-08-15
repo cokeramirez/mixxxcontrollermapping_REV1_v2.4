@@ -2963,7 +2963,7 @@ PioneerDDJREV1.Components.Effects = {
     fxUpdate: function(value, group) {
         const newState = (value === 1);
         const midiValue = newState ? PioneerDDJREV1.LED_ON : PioneerDDJREV1.LED_OFF;
-        const prefix = group.substring(0, group.indexOf("_Effect"));
+        const prefix = group.substring(0, group.lastIndexOf("_Effect"));
         const entry = this.fxUnitTable[prefix];
         if (!entry) {
             return;
@@ -3006,19 +3006,12 @@ PioneerDDJREV1.Components.Effects = {
         delete this.buttonTimeouts[fxGroup];
     },
     handleSinglePress: function(fxGroup, buttonIndex, mixxxUnit) {
-        for (let i = 0; i < 3; i++) {
-            this.effectStates[fxGroup][i] = (i === buttonIndex);
-        }
         this.syncSingleEffect(fxGroup, buttonIndex, mixxxUnit);
     },
     handleDoublePress: function(fxGroup, buttonIndices, mixxxUnit) {
-        for (let i = 0; i < 3; i++) {
-            this.effectStates[fxGroup][i] = buttonIndices.includes(i);
-        }
         this.syncDualEffects(fxGroup, mixxxUnit, buttonIndices);
     },
-    handleTriplePress: function(fxGroup, mixxxUnit) {
-        this.effectStates[fxGroup].fill(true);
+    handleTriplePress: function(_fxGroup, mixxxUnit) {
         this.syncAllEffects(mixxxUnit);
     },
     FX: function(control, value, status) {
@@ -3044,32 +3037,51 @@ PioneerDDJREV1.Components.Effects = {
             return;
         }
         this.buttonStates[fxGroup][buttonIndex] = value > 0;
-        this.bufferButtonPress(fxGroup, buttonIndex, mixxxUnit);
-    },
-    syncSingleEffect: function(fxGroup, activeButtonIndex, mixxxUnit) {
-        const unitNumber = mixxxUnit.includes("Unit1") ? 1 : 2;
-        if (this.buttonStates[fxGroup][activeButtonIndex]) {
-            const activeGroup = "[EffectRack1_EffectUnit" + unitNumber + "_Effect" + (activeButtonIndex + 1) + "]";
-            engine.setValue(activeGroup, "enabled", 0);
-            return;
+        // Only buffer presses on Note-On to avoid re-triggering on release
+        if (value > 0) {
+            this.bufferButtonPress(fxGroup, buttonIndex, mixxxUnit);
         }
+    },
+    syncSingleEffect: function(_fxGroup, activeButtonIndex, mixxxUnit) {
+        const unitNumber = mixxxUnit.includes("Unit1") ? 1 : 2;
+        const currentStates = [1, 2, 3].map(function(i) {
+            return engine.getValue("[EffectRack1_EffectUnit" + unitNumber + "_Effect" + i + "]", "enabled") > 0;
+        });
+        // Toggle OFF if this effect was already the only one active; otherwise isolate it
+        const isOnlyActive = currentStates[activeButtonIndex] &&
+            currentStates.every(function(active, idx) { return idx === activeButtonIndex || !active; });
+
         for (let i = 0; i < 3; i++) {
             const effectGroup = "[EffectRack1_EffectUnit" + unitNumber + "_Effect" + (i + 1) + "]";
-            engine.setValue(effectGroup, "enabled", i === activeButtonIndex ? 1 : 0);
+            engine.setValue(effectGroup, "enabled", (!isOnlyActive && i === activeButtonIndex) ? 1 : 0);
         }
     },
     syncDualEffects: function(_fxGroup, mixxxUnit, buttonIndices) {
         const unitNumber = mixxxUnit.includes("Unit1") ? 1 : 2;
+        const currentStates = [1, 2, 3].map(function(i) {
+            return engine.getValue("[EffectRack1_EffectUnit" + unitNumber + "_Effect" + i + "]", "enabled") > 0;
+        });
+        // Toggle OFF if this exact dual combination was already active; otherwise activate it
+        const isExactComboActive = currentStates.every(function(active, idx) {
+            return buttonIndices.includes(idx) ? active : !active;
+        });
+
         for (let i = 0; i < 3; i++) {
             const effectGroup = "[EffectRack1_EffectUnit" + unitNumber + "_Effect" + (i + 1) + "]";
-            engine.setValue(effectGroup, "enabled", buttonIndices.includes(i) ? 1 : 0);
+            engine.setValue(effectGroup, "enabled", (!isExactComboActive && buttonIndices.includes(i)) ? 1 : 0);
         }
     },
     syncAllEffects: function(mixxxUnit) {
         const unitNumber = mixxxUnit.includes("Unit1") ? 1 : 2;
+        const currentStates = [1, 2, 3].map(function(i) {
+            return engine.getValue("[EffectRack1_EffectUnit" + unitNumber + "_Effect" + i + "]", "enabled") > 0;
+        });
+        // Toggle OFF if all 3 effects were already active; otherwise activate all
+        const allActive = currentStates.every(function(active) { return active; });
+
         for (let i = 0; i < 3; i++) {
             const effectGroup = "[EffectRack1_EffectUnit" + unitNumber + "_Effect" + (i + 1) + "]";
-            engine.setValue(effectGroup, "enabled", 1);
+            engine.setValue(effectGroup, "enabled", allActive ? 0 : 1);
         }
     },
     syncNoEffects: function(mixxxUnit) {
