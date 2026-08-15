@@ -257,6 +257,7 @@ PioneerDDJREV1._samplerGroups = [];
 })();
 
 PioneerDDJREV1.lastStemChannel = null;
+PioneerDDJREV1.lastBrowseTick = 0;
 
 // Store timer IDs
 PioneerDDJREV1.timers = {};
@@ -2970,10 +2971,22 @@ PioneerDDJREV1.Components.Effects = {
                 PioneerDDJREV1.Components.Stems.applyStemQuickChainStep(stemRacks, value === 0x7F);
                 return;
             }
-            if (value === 0x7F) {
-                engine.setValue(group, "MoveUp", 1);
-            } else if (value === 0x01) {
-                engine.setValue("[Library]", "MoveDown", 1);
+            if (value === 0x7F || value === 0x01) {
+                const now = Date.now();
+                const elapsed = now - (PioneerDDJREV1.lastBrowseTick || 0);
+                PioneerDDJREV1.lastBrowseTick = now;
+
+                let multiplier = 1;
+                if (engine.getValue("[Library]", "focused_widget") === 3) {
+                    if (elapsed < 10) {
+                        multiplier = 10;
+                    } else if (elapsed < 20) {
+                        multiplier = 3;
+                    }
+                }
+
+                const direction = value === 0x01 ? 1 : -1;
+                engine.setValue("[Library]", "MoveVertical", direction * multiplier);
             }
         }
         const fxGroups = {
